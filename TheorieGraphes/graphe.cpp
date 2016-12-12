@@ -21,6 +21,8 @@ Graphe::Graphe(string filepath) {
     this->values = vector< vector< int > >();
     this->fmatrix = vector< vector< string > >();
     this->load(filepath);
+    this->createMatrix();
+    this->displayMatrix();
 }
 
 void Graphe::load(string const filepath) {
@@ -59,7 +61,6 @@ void Graphe::load(string const filepath) {
                     cout<<"Mauvaise formation du fichier : mauvaise contrainte"<<endl<<endl;
                     return;
                 }
-                cout<<origin<< " " << line[i]<<endl;
             }
         }
     }
@@ -104,36 +105,46 @@ bool Graphe::addArc(char origin, char destination) {
     return true;
 }
 
-void Graphe::createMatrix (){
-    int numberVertex = this->vertex.size() + 2 ;
+void Graphe::createMatrix() {
+    int const numberVertex = (int)this->vertex.size() ;
     int i = 0,j = 0;
     
     // create table
-    for (i = 0;i < numberVertex; i++)
-    {
+    for (i = 0; i < numberVertex; i++) {
         this->fmatrix.push_back(vector< string > (numberVertex));
     }
     
     // initalize fmatrix
-    for (i = 0;i < numberVertex;i ++)
-    {
-        for(j = 0;j < numberVertex;j ++)
-        {
-            if ((this-> adjacent[i][j] == 1) || i == 0 || j == 0)
-                this->fmatrix[i][j] = this->values[i][j];
+    for (i = 0; i < numberVertex; i ++) {
+        for(j = 0; j < numberVertex; j ++) {
+            if ((this-> adjacent[i][j] == true))
+                this->fmatrix[i][j] = to_string(this->values[i][j]);
             else
-                this->fmatrix[i][j] = "";
+                this->fmatrix[i][j] = " ";
         }
     }
+}
+
+void Graphe::displayMatrix() {
+    int const numberVertex = (int)this->vertex.size();
     
-    // print fmatrix
-    for(i = 0;i < numberVertex;i ++)
-    {
-        for(j = 0;j < numberVertex;j ++)
-        {
-            std :: cout << this->fmatrix[i][j] << "|";
+    cout<<"----------------------------"<<endl<<"Graphe d'ordonnancement"<<endl<<"----------------------------"<<endl<<endl;
+    
+    cout<<this->vertex.size()<<" sommets"<<endl<<endl;
+    
+    cout<<"Matrice d'adjacence et des valeurs"<<endl<<endl<<"\t\t";
+    for (int i = 0; i < numberVertex; i++) {
+        cout<< this->vertex[i]<< "\t|\t";
+    }
+    
+    cout<<endl;
+    
+    for (int i = 0; i < numberVertex; i++) {
+        cout<< this->vertex[i]<< "\t|\t";
+        for (int j = 0; j < numberVertex; j++) {
+            cout << this->fmatrix[i][j] << "\t|\t";
         }
-        std :: cout << "\n" ;
+        cout<<endl;
     }
 }
 

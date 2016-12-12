@@ -24,7 +24,8 @@ public:
     void load(string const filepath);
     bool addVertex(char name, int cost);
     bool addArc(char origin, char destination);
-    void createMatrix ();
+    void createMatrix();
+    void displayMatrix();
 
 private:
     vector< char > vertex;
