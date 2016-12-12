@@ -27,13 +27,15 @@ public:
     void load(string const filepath);
     bool addVertex(char name, int cost);
     bool addArc(char origin, char destination);
+    void createMatrix();
+    void displayMatrix();
 
 private:
     vector< char > vertex;
     vector< int > cost;
     vector< vector< bool > > adjacent;
     vector< vector< int > > values;
-    vector< vector< int > > fmatrix;
+    vector< vector< string > > fmatrix;
 };
 
 #endif /* graphe_hpp */
