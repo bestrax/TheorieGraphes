@@ -14,7 +14,7 @@
 using namespace std;
 
 class Graphe {
-    
+
 public:
     Graphe();
     Graphe(string filepath);
@@ -22,14 +22,15 @@ public:
     void load(string filepath);
     bool addVertex(char name, int cost);
     bool addArc(char origin, char destination);
-    
+    void createMatrix ();
+
 private:
     vector< char > vertex;
     vector< int > cost;
     vector< vector< bool > > adjacent;
     vector< vector< int > > values;
-    vector< vector< int > > fmatrix;
-    
+    vector< vector< char > > fmatrix;
+
 };
 
 #endif /* graphe_hpp */
