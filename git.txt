@@ -1,0 +1,10 @@
+Ouverture
+	git @adresse_dossier
+
+Importer -> efface ce qui est pas importer
+	git pull
+
+Exporte ce qu on créé
+	git add .
+	git commit -m "message explicatif"
+	git push origin
