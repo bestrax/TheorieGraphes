@@ -32,6 +32,10 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="TheorieGraphes/file.cpp" />
+		<Unit filename="TheorieGraphes/file.hpp" />
+		<Unit filename="TheorieGraphes/graphe.cpp" />
+		<Unit filename="TheorieGraphes/graphe.hpp" />
 		<Unit filename="TheorieGraphes/main.cpp" />
 		<Extensions>
 			<code_completion />
