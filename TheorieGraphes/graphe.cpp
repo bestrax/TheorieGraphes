@@ -11,3 +11,10 @@ Graphe::Graphe() {
     this->values = NULL;
     this->fmatrix = NULL;
 }
+
+
+bool Graphe :: addVertex(char name, int cost) {
+
+
+
+}
