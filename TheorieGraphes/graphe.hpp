@@ -8,7 +8,8 @@
 
 #include <iostream>
 #include <stdio.h>
-#include <string.h>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -23,10 +24,11 @@ public:
     bool addArc(char origin, char destination);
     
 private:
-    int nbVertex;
-    bool ** adjacent;
-    int ** values;
-    int ** fmatrix;
+    vector< char > vertex;
+    vector< int > cost;
+    vector< vector< bool > > adjacent;
+    vector< vector< int > > values;
+    vector< vector< int > > fmatrix;
     
 };
 
