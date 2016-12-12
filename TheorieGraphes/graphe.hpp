@@ -18,12 +18,13 @@ public:
     Graphe();
     Graphe(string filepath);
     // Déstructeur
-    
+    void load(string filepath);
     bool addVertex(char name, int cost);
     bool addArc(char origin, char destination);
     
 private:
-    int ** adjacent;
+    int nbVertex;
+    bool ** adjacent;
     int ** values;
     int ** fmatrix;
     
