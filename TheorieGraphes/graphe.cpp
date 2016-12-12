@@ -64,7 +64,6 @@ void Graphe::load(string const filepath) {
         }
     }
     
-    cout<<"a";
 }
 
 bool Graphe::addVertex(char name, int cost) {
