@@ -4,10 +4,11 @@
 //
 
 #include <iostream>
+#include "graphe.hpp"
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
+   
+    Graphe graphe("Graphes/test.txt");
     
-    std::cout << "Hello, World!\n";
     return 0;
 }

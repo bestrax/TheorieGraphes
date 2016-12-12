@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -19,7 +20,7 @@ public:
     Graphe();
     Graphe(string filepath);
     // Déstructeur
-    void load(string filepath);
+    void load(string const filepath);
     bool addVertex(char name, int cost);
     bool addArc(char origin, char destination);
     
