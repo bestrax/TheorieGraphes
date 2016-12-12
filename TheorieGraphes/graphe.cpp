@@ -63,3 +63,10 @@ void Graphe::load(string const filepath) {
     
     
 }
+
+
+bool Graphe :: addVertex(char name, int cost) {
+
+
+    return true;
+}
