@@ -2,9 +2,6 @@
 //  main.cpp
 //  TheorieGraphes
 //
-//  Created by ROBERT Bastien on 12/12/2016.
-//  Copyright © 2016 ROBERT Bastien. All rights reserved.
-//
 
 #include <iostream>
 
