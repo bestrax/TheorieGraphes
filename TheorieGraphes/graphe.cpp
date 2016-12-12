@@ -108,54 +108,51 @@ bool Graphe::addArc(char origin, char destination) {
 <<<<<<< HEAD
 void displayAdj (**adjacent)
 {
-    string a = "a|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|";
-    string z = "z|";
-    string e = a.substr(0,2*vertex.size());
-
-    cout<<e<<z<<endl;
-
-    for(int i = 0; i< this->vertex.size(); i++)
-    {
-        for(int j= 0; j< this->vertex.size(); j++ )
-        {
-         cout << this->adjacent[i][j],"|"<< endl;
-
-        }
-        cout << "\n"<< endl;
+        cout<<"Matrice d'adjacence"<<endl<<endl<<"\t\t";
+    for (int i = 0; i < numberVertex; i++) {
+        cout<< this->vertex[i]<< "\t|\t";
     }
+
+    cout<<endl;
+
+    for (int i = 0; i < numberVertex; i++) {
+        cout<< this->vertex[i]<< "\t|\t";
+        for (int j = 0; j < numberVertex; j++) {
+            cout << this->adjacent[i][j] << "\t|\t";
+        }
+        cout<<endl;
 
 }
 
 
 void displayValue (**values)
 {
-
-
-    for(int i = 0; i< this->vertex.size(); i++)
-    {
-
-        for(int j= 0; j< this->vertex.size(); j++ )
-        {
-
-         cout << this->values[i][j],"|"<< endl;
-
-        }
-        cout << "\n"<< endl;
+       cout<<"Matrice des Valeurs"<<endl<<endl<<"\t\t";
+    for (int i = 0; i < numberVertex; i++) {
+        cout<< this->vertex[i]<< "\t|\t";
     }
 
-    return 0;
+    cout<<endl;
+
+    for (int i = 0; i < numberVertex; i++) {
+        cout<< this->vertex[i]<< "\t|\t";
+        for (int j = 0; j < numberVertex; j++) {
+            cout << this->values[i][j] << "\t|\t";
+        }
+        cout<<endl;
+
 }
 
 =======
 void Graphe::createMatrix() {
     int const numberVertex = (int)this->vertex.size() ;
     int i = 0,j = 0;
-    
+
     // create table
     for (i = 0; i < numberVertex; i++) {
         this->fmatrix.push_back(vector< string > (numberVertex));
     }
-    
+
     // initalize fmatrix
     for (i = 0; i < numberVertex; i ++) {
         for(j = 0; j < numberVertex; j ++) {
@@ -169,18 +166,18 @@ void Graphe::createMatrix() {
 
 void Graphe::displayMatrix() {
     int const numberVertex = (int)this->vertex.size();
-    
+
     cout<<"----------------------------"<<endl<<"Graphe d'ordonnancement"<<endl<<"----------------------------"<<endl<<endl;
-    
+
     cout<<this->vertex.size()<<" sommets"<<endl<<endl;
-    
+
     cout<<"Matrice d'adjacence et des valeurs"<<endl<<endl<<"\t\t";
     for (int i = 0; i < numberVertex; i++) {
         cout<< this->vertex[i]<< "\t|\t";
     }
-    
+
     cout<<endl;
-    
+
     for (int i = 0; i < numberVertex; i++) {
         cout<< this->vertex[i]<< "\t|\t";
         for (int j = 0; j < numberVertex; j++) {
