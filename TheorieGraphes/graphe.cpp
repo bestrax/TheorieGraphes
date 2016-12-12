@@ -11,7 +11,7 @@ Graphe::Graphe() {
     this->cost = vector< int >();
     this->adjacent = vector< vector< bool > >();
     this->values = vector< vector< int > >();
-    this->fmatrix = vector< vector< char > >();
+    this->fmatrix = vector< vector< string > >();
 }
 
 Graphe::Graphe(string filepath) {
@@ -19,7 +19,7 @@ Graphe::Graphe(string filepath) {
     this->cost = vector< int >();
     this->adjacent = vector< vector< bool > >();
     this->values = vector< vector< int > >();
-    this->fmatrix = vector< vector< char > >();
+    this->fmatrix = vector< vector< string > >();
     this->load(filepath);
 }
 
