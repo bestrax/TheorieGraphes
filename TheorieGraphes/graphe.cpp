@@ -11,3 +11,10 @@ Graphe::Graphe() {
     this->values = NULL;
     this->fmatrix = NULL;
 }
+
+Graphe::Graphe(string filepath){
+    this->adjacent = NULL;
+    this->values = NULL;
+    this->fmatrix = NULL;
+    
+}
