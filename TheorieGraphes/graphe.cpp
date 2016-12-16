@@ -26,6 +26,7 @@ Graphe::Graphe(string filepath) {
     this->displayMatrix();
     this->displayAdj();
     this->displayValue();
+    this->transitif();
 }
 
 void Graphe::load(string const filepath) {
@@ -250,3 +251,57 @@ vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacent) {
     return roots;
 }
 
+void Graphe::transitif()
+ {
+    int const numberVertex = (int)this->vertex.size();
+    int i=0;
+    int j=0;
+    int k=0;
+
+        for (k = 0; k < numberVertex; k++)
+        {
+            for (i = 0; i < numberVertex; i++)
+            {
+                for (j = 0; j < numberVertex; j++)
+                {
+                    if ((this->adjacent[i][k] *this->adjacent[k][j] != 0) && (i != j))
+                    {
+                        if ((this->adjacent[i][k] + this->adjacent[k][j] < this->adjacent[i][j]) || (this->adjacent[i][j] == 0))
+                        {
+                            this->adjacent[i][j] =this->adjacent[i][k] + this->adjacent[k][j];
+                        }
+                    }
+                }
+            }
+     }
+
+     cout<<"Matrice transitive detection de circuit "<<endl<<endl<<"\t\t";
+        for ( i = 0; i < numberVertex; i++) {
+            cout<< this->vertex[i]<< "\t|\t";
+        }
+
+        cout<<endl;
+
+        for ( i = 0; i < numberVertex; i++) {
+            cout<< this->vertex[i]<< "\t|\t";
+            for (j = 0; j < numberVertex; j++) {
+                cout << this->adjacent[i][j] << "\t|\t";
+            }
+            cout<<endl;
+        }
+
+    for ( i = 0 ; i < numberVertex ; i++)
+    {
+        for (j = 0 ; j < numberVertex ; j++)
+        {
+            if ((adjacent[i][j] == 1)&&(i==j))
+            {
+                cout<<" circuit detecte : abandon"<<endl;
+                exit(0);
+                cout<<"L'abandon n'a pas fonctionne"<<endl;
+
+            }
+
+        }
+    }
+ }

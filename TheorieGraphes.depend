@@ -4,7 +4,7 @@
 	<fstream>
 	"graphe.hpp"
 
-1481879778 c:\users\gagalaterreur\documents\efrei\l2\s5\théorie des graphes\theoriegraphes\theoriegraphes\graphe.hpp
+1481886225 c:\users\gagalaterreur\documents\efrei\l2\s5\théorie des graphes\theoriegraphes\theoriegraphes\graphe.hpp
 	<iostream>
 	<stdio.h>
 	<algorithm>
@@ -12,8 +12,4 @@
 	<vector>
 	<fstream>
 	<sstream>
-
-1481880184 source:c:\users\gagalaterreur\documents\efrei\l2\s5\théorie des graphes\theoriegraphes\theoriegraphes\graphe.cpp
-	"graphe.hpp"
-	<fstream>
 
