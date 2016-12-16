@@ -45,6 +45,7 @@ private:
     vector< vector< string > > fmatrix;
     vector< int > rank;
     vector< task > tasks;
+    
 };
 
 #endif /* graphe_hpp */
