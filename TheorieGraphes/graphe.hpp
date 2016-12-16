@@ -20,6 +20,9 @@ class Graphe {
 public:
     Graphe();
     Graphe(string filepath);
+    void displayAdj(vector< vector< bool > > adjacent);
+    void displayValue(vector< vector< int > > values);
+
     // Déstructeur
     void load(string const filepath);
     bool addVertex(char name, int cost);
