@@ -1,5 +1,5 @@
 Ouverture
-	git @adresse_dossier
+	cd adresse_dossier
 
 Importer -> efface ce qui est pas importer
 	git pull

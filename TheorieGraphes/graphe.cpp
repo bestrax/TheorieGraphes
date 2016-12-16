@@ -50,6 +50,23 @@ void Graphe::load(string const filepath) {
         }
     }
 
+    cout<<"----------------------------"<<endl<<"Probleme d'ordonnancement"<<endl<<"----------------------------"<<endl<<endl;
+    cout<<"Durees des taches"<<endl<<endl;
+
+    for(int i = 0; i <nbVertex; i++) {
+        cout<<this->vertex[i]<<"\t";
+    }
+
+    cout<<endl;
+
+    for(int i = 0; i <nbVertex; i++) {
+        cout<<this->cost[i]<<"\t";
+    }
+
+    cout<<endl<<endl;
+
+    cout<<"Contraintes"<<endl<<endl;
+
     while (!file.eof()) {
         file >> line;
 
@@ -62,9 +79,12 @@ void Graphe::load(string const filepath) {
                     cout<<"Mauvaise formation du fichier : mauvaise contrainte"<<endl<<endl;
                     return;
                 }
+                cout<<origin<<" ne peut commencer que lorsque la tache "<<line[i]<<" est terminee"<<endl;
             }
         }
     }
+
+    cout<<endl<<endl;
 
 }
 
@@ -105,7 +125,6 @@ bool Graphe::addArc(char origin, char destination) {
 
     return true;
 }
-
 
 void Graphe :: displayAdj ()//vector<char>& adjacent
 {
@@ -161,7 +180,7 @@ void Graphe::createMatrix() {
     for (i = 0; i < numberVertex; i ++) {
         for(j = 0; j < numberVertex; j ++) {
             if ((this-> adjacent[i][j] == true))
-                this->fmatrix[i][j] = to_string(this->values[i][j]);
+                this->fmatrix[i][j] = patch::to_string(this->values[i][j]);
             else
                 this->fmatrix[i][j] = " ";
         }
@@ -191,4 +210,41 @@ void Graphe::displayMatrix() {
     }
 }
 
+void Graphe::computeRank() {
+
+    int k = 0, deleted = 0;
+    vector< int > roots;
+    vector< vector< bool > > adjacentMatrix = this->adjacent;
+
+    while (deleted < (this->vertex.size() - 1) ) {
+        roots = searchRoot(adjacentMatrix);
+        for (int i = 0; i < roots.size(); i++) {
+            this->rank[roots[i]] = k;
+            // TO DO
+            for (int j = 0; j < adjacentMatrix[roots[i]].size(); j++) {
+                adjacentMatrix[roots[i]][j] = false;
+            }
+        }
+    }
+
+}
+
+vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacent) {
+
+    vector< int > roots;
+
+
+    for (int i = 0; i < adjacent.size(); i++) {
+        bool isRoot = true;
+        for (int j = 0; j <adjacent[i].size(); j++) {
+            if (adjacent[i][j] == true)
+                isRoot = false;
+        }
+
+        if (isRoot)
+            roots.push_back(i);
+    }
+
+    return roots;
+}
 

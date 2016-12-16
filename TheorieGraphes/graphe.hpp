@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -21,7 +22,6 @@ public:
     Graphe();
     Graphe(string filepath);
 
-
     // Déstructeur
     void load(string const filepath);
     bool addVertex(char name, int cost);
@@ -30,6 +30,8 @@ public:
     void displayMatrix();
     void displayAdj();
     void displayValue();
+    void computeRank();
+    vector< int > searchRoot(vector< vector< bool > > &adjacent);
 
 private:
     vector< char > vertex;
@@ -37,6 +39,20 @@ private:
     vector< vector< bool > > adjacent;
     vector< vector< int > > values;
     vector< vector< string > > fmatrix;
+    vector< int > rank;
+    vector< int > dateBegin;
+
 };
+
+// Afin de régler le problème des vieux GCC (par exemple ceux disponible à l'école...)
+namespace patch
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
 
 #endif /* graphe_hpp */
