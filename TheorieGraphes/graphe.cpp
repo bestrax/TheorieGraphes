@@ -24,6 +24,8 @@ Graphe::Graphe(string filepath) {
     this->load(filepath);
     this->createMatrix();
     this->displayMatrix();
+    this->displayAdj();
+    this->displayValue();
 }
 
 void Graphe::load(string const filepath) {
