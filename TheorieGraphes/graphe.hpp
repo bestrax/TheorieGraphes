@@ -31,7 +31,7 @@ public:
     void createMatrix();
     void displayMatrix();
     void computeRank();
-    vector< int > searchRoot(vector< vector< bool > > &adjacent);
+    vector< int > searchRoot(vector< vector< bool > > &adjacent, vector< int > ignore);
 
 private:
     vector< char > vertex;

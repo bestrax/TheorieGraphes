@@ -23,6 +23,7 @@ Graphe::Graphe(string filepath) {
     this->load(filepath);
     this->createMatrix();
     this->displayMatrix();
+    this->computeRank();
 }
 
 void Graphe::load(string const filepath) {
@@ -207,37 +208,41 @@ void Graphe::displayMatrix() {
 
 void Graphe::computeRank() {
     
-    int k = 0, deleted = 0;
+    int k = 0;
     vector< int > roots;
     vector< vector< bool > > adjacentMatrix = this->adjacent;
+    vector< int > ignore;
     
-    while (deleted < (this->vertex.size() - 1) ) {
-        roots = searchRoot(adjacentMatrix);
+    if (this->rank.size() <= this->vertex.size() ) {
+        this->rank = vector< int >(this->vertex.size());
+    }
+    
+    while (ignore.size() < this->vertex.size() ) {
+        roots = searchRoot(adjacentMatrix, ignore);
         for (int i = 0; i < roots.size(); i++) {
             this->rank[roots[i]] = k;
-            deleted++;
-            for (int j = 0; j < adjacentMatrix[roots[i]].size(); j++) {
-                adjacentMatrix[roots[i]][j] = false;
-            }
+            ignore.push_back(roots[i]);
         }
+        roots.clear();
+        k++;
     }
-    cout<<adjacentMatrix.size();
 }
 
-vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacent) {
+vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vector< int > ignore) {
     
     vector< int > roots;
-
     
-    for (int i = 0; i < adjacent.size(); i++) {
+    for (int i = 0; i < adjacentMatrix.size(); i++) {
         bool isRoot = true;
-        for (int j = 0; j <adjacent[i].size(); j++) {
-            if (adjacent[i][j] == true)
-                isRoot = false;
+        if (find (ignore.begin(), ignore.end(), i) == ignore.end()) {
+            for (int j = 0; j <adjacentMatrix[i].size(); j++) {
+                if (adjacentMatrix[j][i] == true && find (ignore.begin(), ignore.end(), j) == ignore.end())
+                    isRoot = false;
+            }
+            
+            if (isRoot)
+                roots.push_back(i);
         }
-        
-        if (isRoot)
-            roots.push_back(i);
     }
         
     return roots;
