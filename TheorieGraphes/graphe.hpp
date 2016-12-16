@@ -15,11 +15,6 @@
 
 using namespace std;
 
-struct task {
-    int dateBegin;
-    int time;
-};
-
 class Graphe {
 
 public:
@@ -44,8 +39,8 @@ private:
     vector< vector< int > > values;
     vector< vector< string > > fmatrix;
     vector< int > rank;
-    vector< task > tasks;
-    
+    vector< int > dateBegin;
+
 };
 
 #endif /* graphe_hpp */
