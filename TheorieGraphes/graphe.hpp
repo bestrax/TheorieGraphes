@@ -30,8 +30,9 @@ public:
     void displayMatrix();
     void displayAdj();
     void displayValue();
+    void computeDateBegin();
     void computeRank();
-    vector< int > searchRoot(vector< vector< bool > > &adjacent, vector< int > ignore);
+    vector< int > searchRoot(vector< vector< bool > > &adjacent, vector< int > &ignore);
 
 private:
     vector< char > vertex;
