@@ -220,13 +220,13 @@ void Graphe::computeRank() {
         roots = searchRoot(adjacentMatrix);
         for (int i = 0; i < roots.size(); i++) {
             this->rank[roots[i]] = k;
-            // TO DO
+            deleted++;
             for (int j = 0; j < adjacentMatrix[roots[i]].size(); j++) {
                 adjacentMatrix[roots[i]][j] = false;
             }
         }
     }
-
+    cout<<adjacentMatrix.size();
 }
 
 vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacent) {
