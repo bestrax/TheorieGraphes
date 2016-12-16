@@ -4,6 +4,7 @@
 //
 
 #include "graphe.hpp"
+#include <fstream>
 
 
 Graphe::Graphe() {
@@ -23,6 +24,9 @@ Graphe::Graphe(string filepath) {
     this->load(filepath);
     this->createMatrix();
     this->displayMatrix();
+    this->computeRank();
+    this->displayAdj();
+    this->displayValue();
 }
 
 void Graphe::load(string const filepath) {
@@ -125,9 +129,10 @@ bool Graphe::addArc(char origin, char destination) {
     return true;
 }
 
-void displayAdj (vector< vector< bool > > adjacent)
+void Graphe :: displayAdj ()//vector<char>& adjacent
 {
-     /*   cout<<"Matrice d'adjacence"<<endl<<endl<<"\t\t";
+    int const numberVertex = (int)this->vertex.size() ;
+        cout<<"Matrice d'adjacence"<<endl<<endl<<"\t\t";
     for (int i = 0; i < numberVertex; i++) {
         cout<< this->vertex[i]<< "\t|\t";
     }
@@ -139,14 +144,15 @@ void displayAdj (vector< vector< bool > > adjacent)
         for (int j = 0; j < numberVertex; j++) {
             cout << this->adjacent[i][j] << "\t|\t";
         }
-        cout<<endl;*/
+        cout<<endl;
 
 }
+}
 
-
-void displayValue (vector< vector< int > > values)
+void Graphe :: displayValue ()
 {
-     /*  cout<<"Matrice des Valeurs"<<endl<<endl<<"\t\t";
+     int const numberVertex = (int)this->vertex.size() ;
+       cout<<"Matrice des Valeurs"<<endl<<endl<<"\t\t";
     for (int i = 0; i < numberVertex; i++) {
         cout<< this->vertex[i]<< "\t|\t";
     }
@@ -158,9 +164,11 @@ void displayValue (vector< vector< int > > values)
         for (int j = 0; j < numberVertex; j++) {
             cout << this->values[i][j] << "\t|\t";
         }
-        cout<<endl;*/
+        cout<<endl;
 
 }
+}
+
 
 void Graphe::createMatrix() {
     int const numberVertex = (int)this->vertex.size() ;
@@ -175,7 +183,7 @@ void Graphe::createMatrix() {
     for (i = 0; i < numberVertex; i ++) {
         for(j = 0; j < numberVertex; j ++) {
             if ((this-> adjacent[i][j] == true))
-                this->fmatrix[i][j] = to_string(this->values[i][j]);
+                this->fmatrix[i][j] = patch::to_string(this->values[i][j]);
             else
                 this->fmatrix[i][j] = " ";
         }
@@ -207,37 +215,40 @@ void Graphe::displayMatrix() {
 
 void Graphe::computeRank() {
 
-    int k = 0, deleted = 0;
+    int k = 0;
     vector< int > roots;
     vector< vector< bool > > adjacentMatrix = this->adjacent;
+    vector< int > ignore;
 
-    while (deleted < (this->vertex.size() - 1) ) {
-        roots = searchRoot(adjacentMatrix);
-        for (int i = 0; i < roots.size(); i++) {
-            this->rank[roots[i]] = k;
-            // TO DO
-            for (int j = 0; j < adjacentMatrix[roots[i]].size(); j++) {
-                adjacentMatrix[roots[i]][j] = false;
-            }
-        }
+    if (this->rank.size() <= this->vertex.size() ) {
+        this->rank = vector< int >(this->vertex.size());
     }
 
+    while (ignore.size() < this->vertex.size() ) {
+        roots = searchRoot(adjacentMatrix, ignore);
+        for (int i = 0; i < roots.size(); i++) {
+            this->rank[roots[i]] = k;
+            ignore.push_back(roots[i]);
+        }
+        roots.clear();
+        k++;
+    }
 }
-
-vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacent) {
+vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vector< int > ignore) {
 
     vector< int > roots;
 
-
-    for (int i = 0; i < adjacent.size(); i++) {
+    for (int i = 0; i < adjacentMatrix.size(); i++) {
         bool isRoot = true;
-        for (int j = 0; j <adjacent[i].size(); j++) {
-            if (adjacent[i][j] == true)
-                isRoot = false;
-        }
+        if (find (ignore.begin(), ignore.end(), i) == ignore.end()) {
+            for (int j = 0; j <adjacentMatrix[i].size(); j++) {
+                if (adjacentMatrix[j][i] == true && find (ignore.begin(), ignore.end(), j) == ignore.end())
+                    isRoot = false;
+            }
 
-        if (isRoot)
-            roots.push_back(i);
+            if (isRoot)
+                roots.push_back(i);
+        }
     }
 
     return roots;
