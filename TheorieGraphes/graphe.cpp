@@ -205,3 +205,41 @@ void Graphe::displayMatrix() {
     }
 }
 
+void Graphe::computeRank() {
+    
+    int k = 0, deleted = 0;
+    vector< int > roots;
+    vector< vector< bool > > adjacentMatrix = this->adjacent;
+    
+    while (deleted < (this->vertex.size() - 1) ) {
+        roots = searchRoot(adjacentMatrix);
+        for (int i = 0; i < roots.size(); i++) {
+            this->rank[roots[i]] = k;
+            // TO DO
+            for (int j = 0; j < adjacentMatrix[roots[i]].size(); j++) {
+                adjacentMatrix[roots[i]][j] = false;
+            }
+        }
+    }
+    
+}
+
+vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacent) {
+    
+    vector< int > roots;
+
+    
+    for (int i = 0; i < adjacent.size(); i++) {
+        bool isRoot = true;
+        for (int j = 0; j <adjacent[i].size(); j++) {
+            if (adjacent[i][j] == true)
+                isRoot = false;
+        }
+        
+        if (isRoot)
+            roots.push_back(i);
+    }
+        
+    return roots;
+}
+

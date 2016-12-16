@@ -15,6 +15,11 @@
 
 using namespace std;
 
+struct task {
+    int dateBegin;
+    int time;
+};
+
 class Graphe {
 
 public:
@@ -29,6 +34,8 @@ public:
     bool addArc(char origin, char destination);
     void createMatrix();
     void displayMatrix();
+    void computeRank();
+    vector< int > searchRoot(vector< vector< bool > > &adjacent);
 
 private:
     vector< char > vertex;
@@ -36,6 +43,8 @@ private:
     vector< vector< bool > > adjacent;
     vector< vector< int > > values;
     vector< vector< string > > fmatrix;
+    vector< int > rank;
+    vector< task > tasks;
 };
 
 #endif /* graphe_hpp */
