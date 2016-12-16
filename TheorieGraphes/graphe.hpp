@@ -21,8 +21,6 @@ class Graphe {
 public:
     Graphe();
     Graphe(string filepath);
-    void displayAdj(vector< vector< bool > > adjacent);
-    void displayValue(vector< vector< int > > values);
 
     // Déstructeur
     void load(string const filepath);
@@ -30,6 +28,8 @@ public:
     bool addArc(char origin, char destination);
     void createMatrix();
     void displayMatrix();
+    void displayAdj();
+    void displayValue();
     void computeRank();
     vector< int > searchRoot(vector< vector< bool > > &adjacent, vector< int > ignore);
 

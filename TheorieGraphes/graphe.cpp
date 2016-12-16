@@ -4,6 +4,7 @@
 //
 
 #include "graphe.hpp"
+#include <fstream>
 
 
 Graphe::Graphe() {
@@ -24,6 +25,8 @@ Graphe::Graphe(string filepath) {
     this->createMatrix();
     this->displayMatrix();
     this->computeRank();
+    this->displayAdj();
+    this->displayValue();
 }
 
 void Graphe::load(string const filepath) {
@@ -49,24 +52,24 @@ void Graphe::load(string const filepath) {
             return;
         }
     }
-    
+
     cout<<"----------------------------"<<endl<<"Probleme d'ordonnancement"<<endl<<"----------------------------"<<endl<<endl;
     cout<<"Durees des taches"<<endl<<endl;
-    
+
     for(int i = 0; i <nbVertex; i++) {
         cout<<this->vertex[i]<<"\t";
     }
-    
+
     cout<<endl;
-    
+
     for(int i = 0; i <nbVertex; i++) {
         cout<<this->cost[i]<<"\t";
     }
-    
+
     cout<<endl<<endl;
-    
+
     cout<<"Contraintes"<<endl<<endl;
-    
+
     while (!file.eof()) {
         file >> line;
 
@@ -83,9 +86,9 @@ void Graphe::load(string const filepath) {
             }
         }
     }
-    
+
     cout<<endl<<endl;
-    
+
 }
 
 bool Graphe::addVertex(char name, int cost) {
@@ -126,9 +129,10 @@ bool Graphe::addArc(char origin, char destination) {
     return true;
 }
 
-void displayAdj (vector< vector< bool > > adjacent)
+void Graphe :: displayAdj ()//vector<char>& adjacent
 {
-     /*   cout<<"Matrice d'adjacence"<<endl<<endl<<"\t\t";
+    int const numberVertex = (int)this->vertex.size() ;
+        cout<<"Matrice d'adjacence"<<endl<<endl<<"\t\t";
     for (int i = 0; i < numberVertex; i++) {
         cout<< this->vertex[i]<< "\t|\t";
     }
@@ -140,14 +144,15 @@ void displayAdj (vector< vector< bool > > adjacent)
         for (int j = 0; j < numberVertex; j++) {
             cout << this->adjacent[i][j] << "\t|\t";
         }
-        cout<<endl;*/
+        cout<<endl;
 
 }
+}
 
-
-void displayValue (vector< vector< int > > values)
+void Graphe :: displayValue ()
 {
-     /*  cout<<"Matrice des Valeurs"<<endl<<endl<<"\t\t";
+     int const numberVertex = (int)this->vertex.size() ;
+       cout<<"Matrice des Valeurs"<<endl<<endl<<"\t\t";
     for (int i = 0; i < numberVertex; i++) {
         cout<< this->vertex[i]<< "\t|\t";
     }
@@ -159,9 +164,11 @@ void displayValue (vector< vector< int > > values)
         for (int j = 0; j < numberVertex; j++) {
             cout << this->values[i][j] << "\t|\t";
         }
-        cout<<endl;*/
+        cout<<endl;
 
 }
+}
+
 
 void Graphe::createMatrix() {
     int const numberVertex = (int)this->vertex.size() ;
@@ -227,7 +234,6 @@ void Graphe::computeRank() {
         k++;
     }
 }
-
 vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vector< int > ignore) {
     
     vector< int > roots;
@@ -244,8 +250,7 @@ vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vecto
                 roots.push_back(i);
         }
     }
-        
+
     return roots;
 }
-
 
