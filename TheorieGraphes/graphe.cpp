@@ -49,6 +49,24 @@ void Graphe::load(string const filepath) {
         }
     }
     
+    cout<<"----------------------------"<<endl<<"Probleme d'ordonnancement"<<endl<<"----------------------------"<<endl<<endl;
+    cout<<"Durees des taches"<<endl<<endl;
+    
+    for(int i = 0; i <nbVertex; i++) {
+        cout<<this->vertex[i]<<"\t";
+    }
+    
+    cout<<endl;
+    
+    for(int i = 0; i <nbVertex; i++) {
+        cout<<this->cost[i]<<"\t";
+    }
+    
+    cout<<endl<<endl;
+    
+    cout<<"Contraintes"<<endl<<endl;
+    
+    
     while (!file.eof()) {
         file >> line;
         
@@ -61,9 +79,12 @@ void Graphe::load(string const filepath) {
                     cout<<"Mauvaise formation du fichier : mauvaise contrainte"<<endl<<endl;
                     return;
                 }
+                cout<<origin<<" ne peut commencer que lorsque la tache "<<line[i]<<" est terminee"<<endl;
             }
         }
     }
+    
+    cout<<endl<<endl;
     
 }
 
