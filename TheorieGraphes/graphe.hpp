@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -42,5 +43,16 @@ private:
     vector< int > dateBegin;
 
 };
+
+// Afin de régler le problème des vieux GCC (par exemple ceux disponible à l'école...)
+namespace patch
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
 
 #endif /* graphe_hpp */

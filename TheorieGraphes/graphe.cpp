@@ -175,7 +175,7 @@ void Graphe::createMatrix() {
     for (i = 0; i < numberVertex; i ++) {
         for(j = 0; j < numberVertex; j ++) {
             if ((this-> adjacent[i][j] == true))
-                this->fmatrix[i][j] = to_string(this->values[i][j]);
+                this->fmatrix[i][j] = patch::to_string(this->values[i][j]);
             else
                 this->fmatrix[i][j] = " ";
         }
