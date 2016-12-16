@@ -28,6 +28,7 @@ Graphe::Graphe(string filepath) {
     this->displayMatrix();
     this->computeRank();
     this->computeDateBegin();
+    this->GanttBegin();
 
 }
 
@@ -306,22 +307,28 @@ vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vecto
 void Graphe::GanttBegin(){
     int i = 0, date_begin = 0, date_end = 0, j = 0;
     int nb_vertex = (int)this->vertex.size();
-    int max_time = max_element (this->beginDate.begin(), this->beginDate.end());
+    int max_time = *max_element(this->dateBegin.begin(), this->dateBegin.end());
+    
+    max_time += this->cost[distance(this->dateBegin.begin(), max_element(this->dateBegin.begin(), this->dateBegin.end()))];
+    
+    cout<<endl<<endl;
+    cout<<"\t\t";
 
-    for (i = 0;i <= max_time;i ++){
+    for (i = 0;i < max_time;i ++){
         cout << i <<"\t|\t" ;
     }
     cout << endl;
 
     for (i = 0;i < nb_vertex;i ++){
-        cout <<this->vertex[i] << "\t|\t" ;
+        cout <<this->vertex[i];
         date_begin = this->dateBegin[i];
         date_end = this->cost[i] + date_begin;
 
-        for (j = 0;j < max_time;j ++){
-            if (date_begin >= j && date_end <= j)
-                cout << " = ";
+        for (j = 0;j <= max_time;j ++){
             cout << "\t|\t";
+            if (j >= date_begin && date_end > j)
+                cout << "=";
+            
         }
         cout << endl;
     }
@@ -330,22 +337,25 @@ void Graphe::GanttBegin(){
 void Graphe::GanttEnd(){
     int i = 0, date_begin = 0, date_end = 0, j = 0;
     int nb_vertex = (int)this->vertex.size();
-    int max_time = max_element (this->beginEnd.begin(), this->beginEnd.end());
+    int max_time = *max_element(this->dateEnd.begin(), this->dateEnd.end());
+    
+    max_time += this->cost[distance(this->dateEnd.begin(), max_element(this->dateEnd.begin(), this->dateEnd.end()))];
+    
 
-    for (i = 0;i <= max_time;i ++){
+    for (i = 0;i < max_time;i ++){
         cout << i <<"\t|\t" ;
     }
     cout << endl;
 
     for (i = 0;i < nb_vertex;i ++){
-        cout <<this->vertex[i] << "\t|\t" ;
+        cout <<this->vertex[i];
         date_begin = this->dateEnd[i];
         date_end = this->cost[i] + date_begin;
 
         for (j = 0;j < max_time;j ++){
-            if (date_begin >= j && date_end <= j)
-                cout << " = ";
             cout << "\t|\t";
+            if (j >= date_begin && date_end > j)
+                cout << "=";
         }
         cout << endl;
     }
