@@ -4,6 +4,7 @@
 //
 
 #include "graphe.hpp"
+#include <fstream>
 
 
 Graphe::Graphe() {
@@ -105,9 +106,10 @@ bool Graphe::addArc(char origin, char destination) {
     return true;
 }
 
-<<<<<<< HEAD
-void displayAdj (**adjacent)
+
+void Graphe :: displayAdj ()//vector<char>& adjacent
 {
+    int const numberVertex = (int)this->vertex.size() ;
         cout<<"Matrice d'adjacence"<<endl<<endl<<"\t\t";
     for (int i = 0; i < numberVertex; i++) {
         cout<< this->vertex[i]<< "\t|\t";
@@ -123,10 +125,11 @@ void displayAdj (**adjacent)
         cout<<endl;
 
 }
+}
 
-
-void displayValue (**values)
+void Graphe :: displayValue ()
 {
+     int const numberVertex = (int)this->vertex.size() ;
        cout<<"Matrice des Valeurs"<<endl<<endl<<"\t\t";
     for (int i = 0; i < numberVertex; i++) {
         cout<< this->vertex[i]<< "\t|\t";
@@ -142,8 +145,9 @@ void displayValue (**values)
         cout<<endl;
 
 }
+}
 
-=======
+
 void Graphe::createMatrix() {
     int const numberVertex = (int)this->vertex.size() ;
     int i = 0,j = 0;
@@ -186,5 +190,5 @@ void Graphe::displayMatrix() {
         cout<<endl;
     }
 }
->>>>>>> 1684de4e133a893be3724ad8dab12c307f1474ee
+
 

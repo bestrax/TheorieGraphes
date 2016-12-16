@@ -20,8 +20,7 @@ class Graphe {
 public:
     Graphe();
     Graphe(string filepath);
-    void displayAdj();
-    void displayValue();
+
 
     // Déstructeur
     void load(string const filepath);
@@ -29,6 +28,8 @@ public:
     bool addArc(char origin, char destination);
     void createMatrix();
     void displayMatrix();
+    void displayAdj();
+    void displayValue();
 
 private:
     vector< char > vertex;
