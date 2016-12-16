@@ -28,7 +28,7 @@ Graphe::Graphe(string filepath) {
     this->displayMatrix();
     this->computeRank();
     this->computeDateBegin();
-    
+
 }
 
 void Graphe::load(string const filepath) {
@@ -216,62 +216,62 @@ void Graphe::displayMatrix() {
 }
 
 void Graphe::computeDateBegin() {
-    
+
     vector< int > current;
     int calculated = 0, costRank = 0, costBegin = 0;
     const int max = *max_element(this->rank.begin(), this->rank.end());
     int min = max, k= -1;
-    
+
     this->dateBegin = vector< int >(this->vertex.size());
-    
+
     while (calculated < this->vertex.size()) {
-        
+
         min = max;
         costRank = 0;
         for (int i = 0; i < this->rank.size(); i++) {
             if (this->rank[i] > k && this->rank[i] < min) {
-                
+
                 current.clear();
                 min = this->rank[i];
                 current.push_back(i);
                 costRank = this->cost[i];
-                
+
             } else if (this->rank[i] == min) {
-                
+
                 current.push_back(i);
                 if (this->cost[i] > costRank) {
                     costRank = this->cost[i];
                 }
-                
+
             }
         }
-        
+
         if (current.size() > 0) {
             k = this->rank[current[0]];
         }
-        
+
         for (int i = 0; i < current.size(); i++) {
             this->dateBegin[current[i]] = costBegin;
         }
-        
+
         costBegin += costRank;
-        
+
         calculated += current.size();
         current.clear();
     }
 }
 
 void Graphe::computeRank() {
-    
+
     int k = 0;
     vector< int > roots;
     vector< vector< bool > > adjacentMatrix = this->adjacent;
     vector< int > ignore;
-    
+
     if (this->rank.size() <= this->vertex.size() ) {
         this->rank = vector< int >(this->vertex.size());
     }
-    
+
     while (ignore.size() < this->vertex.size() ) {
         roots = searchRoot(adjacentMatrix, ignore);
         for (int i = 0; i < roots.size(); i++) {
@@ -282,10 +282,11 @@ void Graphe::computeRank() {
         k++;
     }
 }
+
 vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vector< int > &ignore) {
-    
+
     vector< int > roots;
-    
+
     for (int i = 0; i < adjacentMatrix.size(); i++) {
         bool isRoot = true;
         if (find (ignore.begin(), ignore.end(), i) == ignore.end()) {
@@ -293,7 +294,7 @@ vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vecto
                 if (adjacentMatrix[j][i] == true && find (ignore.begin(), ignore.end(), j) == ignore.end())
                     isRoot = false;
             }
-            
+
             if (isRoot)
                 roots.push_back(i);
         }
@@ -302,3 +303,50 @@ vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vecto
     return roots;
 }
 
+void Graphe::GanttBegin(){
+    int i = 0, date_begin = 0, date_end = 0, j = 0;
+    int nb_vertex = (int)this->vertex.size();
+    int max_time = max_element (this->beginDate.begin(), this->beginDate.end());
+
+    for (i = 0;i <= max_time;i ++){
+        cout << i <<"\t|\t" ;
+    }
+    cout << endl;
+
+    for (i = 0;i < nb_vertex;i ++){
+        cout <<this->vertex[i] << "\t|\t" ;
+        date_begin = this->dateBegin[i];
+        date_end = this->cost[i] + date_begin;
+
+        for (j = 0;j < max_time;j ++){
+            if (date_begin >= j && date_end <= j)
+                cout << " = ";
+            cout << "\t|\t";
+        }
+        cout << endl;
+    }
+}
+
+void Graphe::GanttEnd(){
+    int i = 0, date_begin = 0, date_end = 0, j = 0;
+    int nb_vertex = (int)this->vertex.size();
+    int max_time = max_element (this->beginEnd.begin(), this->beginEnd.end());
+
+    for (i = 0;i <= max_time;i ++){
+        cout << i <<"\t|\t" ;
+    }
+    cout << endl;
+
+    for (i = 0;i < nb_vertex;i ++){
+        cout <<this->vertex[i] << "\t|\t" ;
+        date_begin = this->dateEnd[i];
+        date_end = this->cost[i] + date_begin;
+
+        for (j = 0;j < max_time;j ++){
+            if (date_begin >= j && date_end <= j)
+                cout << " = ";
+            cout << "\t|\t";
+        }
+        cout << endl;
+    }
+}

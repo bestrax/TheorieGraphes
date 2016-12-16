@@ -32,6 +32,8 @@ public:
     void displayValue();
     void computeDateBegin();
     void computeRank();
+    void GanttBegin ();
+    void GanttEnd ();
     vector< int > searchRoot(vector< vector< bool > > &adjacent, vector< int > &ignore);
 
 private:
@@ -42,6 +44,7 @@ private:
     vector< vector< string > > fmatrix;
     vector< int > rank;
     vector< int > dateBegin;
+    vector< int > dateEnd;
 
 };
 
