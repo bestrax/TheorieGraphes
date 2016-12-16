@@ -22,11 +22,13 @@ Graphe::Graphe(string filepath) {
     this->values = vector< vector< int > >();
     this->fmatrix = vector< vector< string > >();
     this->load(filepath);
+    this->displayAdj();
+    this->displayValue();
     this->createMatrix();
     this->displayMatrix();
     this->computeRank();
-    this->displayAdj();
-    this->displayValue();
+    this->computeDateBegin();
+
 }
 
 void Graphe::load(string const filepath) {
@@ -213,6 +215,52 @@ void Graphe::displayMatrix() {
     }
 }
 
+void Graphe::computeDateBegin() {
+
+    vector< int > current;
+    int calculated = 0, costRank = 0, costBegin = 0;
+    const int max = *max_element(this->rank.begin(), this->rank.end());
+    int min = max, k= -1;
+
+    this->dateBegin = vector< int >(this->vertex.size());
+
+    while (calculated < this->vertex.size()) {
+
+        min = max;
+        costRank = 0;
+        for (int i = 0; i < this->rank.size(); i++) {
+            if (this->rank[i] > k && this->rank[i] < min) {
+
+                current.clear();
+                min = this->rank[i];
+                current.push_back(i);
+                costRank = this->cost[i];
+
+            } else if (this->rank[i] == min) {
+
+                current.push_back(i);
+                if (this->cost[i] > costRank) {
+                    costRank = this->cost[i];
+                }
+
+            }
+        }
+
+        if (current.size() > 0) {
+            k = this->rank[current[0]];
+        }
+
+        for (int i = 0; i < current.size(); i++) {
+            this->dateBegin[current[i]] = costBegin;
+        }
+
+        costBegin += costRank;
+
+        calculated += current.size();
+        current.clear();
+    }
+}
+
 void Graphe::computeRank() {
 
     int k = 0;
@@ -234,7 +282,8 @@ void Graphe::computeRank() {
         k++;
     }
 }
-vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vector< int > ignore) {
+
+vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vector< int > &ignore) {
 
     vector< int > roots;
 
