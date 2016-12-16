@@ -31,6 +31,8 @@ public:
     void displayMatrix();
     void computeRank();
     vector< int > searchRoot(vector< vector< bool > > &adjacent);
+    void GanttBegin ();
+    void GanttEnd ();
 
 private:
     vector< char > vertex;
@@ -40,6 +42,7 @@ private:
     vector< vector< string > > fmatrix;
     vector< int > rank;
     vector< int > dateBegin;
+    vector< int > dateEnd;
 
 };
 

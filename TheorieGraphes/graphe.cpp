@@ -48,24 +48,24 @@ void Graphe::load(string const filepath) {
             return;
         }
     }
-    
+
     cout<<"----------------------------"<<endl<<"Probleme d'ordonnancement"<<endl<<"----------------------------"<<endl<<endl;
     cout<<"Durees des taches"<<endl<<endl;
-    
+
     for(int i = 0; i <nbVertex; i++) {
         cout<<this->vertex[i]<<"\t";
     }
-    
+
     cout<<endl;
-    
+
     for(int i = 0; i <nbVertex; i++) {
         cout<<this->cost[i]<<"\t";
     }
-    
+
     cout<<endl<<endl;
-    
+
     cout<<"Contraintes"<<endl<<endl;
-    
+
     while (!file.eof()) {
         file >> line;
 
@@ -82,9 +82,9 @@ void Graphe::load(string const filepath) {
             }
         }
     }
-    
+
     cout<<endl<<endl;
-    
+
 }
 
 bool Graphe::addVertex(char name, int cost) {
@@ -206,11 +206,11 @@ void Graphe::displayMatrix() {
 }
 
 void Graphe::computeRank() {
-    
+
     int k = 0, deleted = 0;
     vector< int > roots;
     vector< vector< bool > > adjacentMatrix = this->adjacent;
-    
+
     while (deleted < (this->vertex.size() - 1) ) {
         roots = searchRoot(adjacentMatrix);
         for (int i = 0; i < roots.size(); i++) {
@@ -221,26 +221,72 @@ void Graphe::computeRank() {
             }
         }
     }
-    
+
 }
 
 vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacent) {
-    
+
     vector< int > roots;
 
-    
+
     for (int i = 0; i < adjacent.size(); i++) {
         bool isRoot = true;
         for (int j = 0; j <adjacent[i].size(); j++) {
             if (adjacent[i][j] == true)
                 isRoot = false;
         }
-        
+
         if (isRoot)
             roots.push_back(i);
     }
-        
+
     return roots;
 }
 
+void Graphe::GanttBegin(){
+    int i = 0, date_begin = 0, date_end = 0, j = 0;
+    int nb_vertex = (int)this->vertex.size();
+    int max_time = max_element (this->beginDate.begin(), this->beginDate.end());
 
+    for (i = 0;i <= max_time;i ++){
+        cout << i <<"\t|\t" ;
+    }
+    cout << endl;
+
+    for (i = 0;i < nb_vertex;i ++){
+        cout <<this->vertex[i] << "\t|\t" ;
+        date_begin = this->dateBegin[i];
+        date_end = this->cost[i] + date_begin;
+
+        for (j = 0;j < max_time;j ++){
+            if (date_begin >= j && date_end <= j)
+                cout << " = ";
+            cout << "\t|\t";
+        }
+        cout << endl;
+    }
+}
+
+void Graphe::GanttEnd(){
+    int i = 0, date_begin = 0, date_end = 0, j = 0;
+    int nb_vertex = (int)this->vertex.size();
+    int max_time = max_element (this->beginEnd.begin(), this->beginEnd.end());
+
+    for (i = 0;i <= max_time;i ++){
+        cout << i <<"\t|\t" ;
+    }
+    cout << endl;
+
+    for (i = 0;i < nb_vertex;i ++){
+        cout <<this->vertex[i] << "\t|\t" ;
+        date_begin = this->dateEnd[i];
+        date_end = this->cost[i] + date_begin;
+
+        for (j = 0;j < max_time;j ++){
+            if (date_begin >= j && date_end <= j)
+                cout << " = ";
+            cout << "\t|\t";
+        }
+        cout << endl;
+    }
+}
