@@ -32,6 +32,7 @@ public:
     void displayValue();
     void transitif();
     void computeDateBegin();
+    void computeDateEnd();
     void computeRank();
     void GanttBegin ();
     void GanttEnd ();

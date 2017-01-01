@@ -30,6 +30,8 @@ Graphe::Graphe(string filepath) {
     this->computeRank();
     this->computeDateBegin();
     this->GanttBegin();
+    this->computeDateEnd();
+    this->GanttEnd();
 
 }
 
@@ -263,6 +265,82 @@ void Graphe::computeDateBegin() {
     }
 }
 
+void Graphe::computeDateEnd() {
+    
+    if (dateBegin.size() == 0) {
+        printf("Merci d effectuer le calcul de date au plus cours au paravant de la date au plus tard");
+        return;
+    }
+    
+    vector< int > current;
+    int calculated = 0;
+    const int min = *min_element(this->rank.begin(), this->rank.end());
+    int max = min, k= *max_element(this->rank.begin(), this->rank.end())+1;
+    bool lastElement = true;
+    
+    this->dateEnd = vector< int >(this->vertex.size());
+    
+    while (calculated < this->vertex.size()) {
+        
+        max = min;
+        for (int i = 0; i < this->rank.size(); i++) {
+            if (this->rank[i] < k && this->rank[i] > max) {
+                
+                current.clear();
+                max = this->rank[i];
+                current.push_back(i);
+                
+            } else if (this->rank[i] == max) {
+                current.push_back(i);
+            }
+        }
+        
+        if (current.size() > 0) {
+            k = this->rank[current[0]];
+        }
+        
+            
+        if (lastElement) {
+            
+            for (int i = 0; i < current.size(); i++) {
+                this->dateEnd[current[i]] = *max_element(this->dateBegin.begin(), this->dateBegin.end());
+            }
+            lastElement = false;
+            
+        } else {
+            
+            int minSuc = 0;
+            bool firstSuc;
+            
+            for (int i = 0; i < current.size(); i++) {
+                
+                firstSuc = true;
+                
+                for (int j = 0; j < this->adjacent[current[i]].size(); j++) {
+                    
+                    if (this->adjacent[current[i]][j] == true) {
+                        
+                        if (firstSuc) {
+                            minSuc = this->dateEnd[j];
+                            firstSuc = false;
+                        } else if (this->dateEnd[j] < minSuc) {
+                            minSuc = this->dateEnd[j];
+                        }
+                        
+                    }
+                    
+                }
+                this->dateEnd[current[i]] = minSuc - this->cost[current[i]];
+            }
+            
+        }
+        
+        
+        calculated += current.size();
+        current.clear();
+    }
+}
+
 void Graphe::computeRank() {
 
     int k = 0;
@@ -367,7 +445,7 @@ void Graphe::GanttBegin(){
     
     max_time += this->cost[distance(this->dateBegin.begin(), max_element(this->dateBegin.begin(), this->dateBegin.end()))];
     
-    cout<<endl<<endl;
+    cout<<endl<<endl<<"Dates au plus court"<<endl<<endl;
     cout<<"\t\t";
 
     for (i = 0;i < max_time;i ++){
@@ -397,6 +475,8 @@ void Graphe::GanttEnd(){
     
     max_time += this->cost[distance(this->dateEnd.begin(), max_element(this->dateEnd.begin(), this->dateEnd.end()))];
     
+    cout<<endl<<endl<<"Dates au plus tard"<<endl<<endl;
+    cout<<"\t\t";
 
     for (i = 0;i < max_time;i ++){
         cout << i <<"\t|\t" ;
@@ -408,7 +488,7 @@ void Graphe::GanttEnd(){
         date_begin = this->dateEnd[i];
         date_end = this->cost[i] + date_begin;
 
-        for (j = 0;j < max_time;j ++){
+        for (j = 0;j <= max_time;j ++){
             cout << "\t|\t";
             if (j >= date_begin && date_end > j)
                 cout << "=";
