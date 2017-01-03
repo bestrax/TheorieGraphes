@@ -22,6 +22,7 @@ Graphe::Graphe(string filepath) {
     this->values = vector< vector< int > >();
     this->fmatrix = vector< vector< string > >();
     this->load(filepath);
+    this->configGraph();
     this->displayAdj();
     this->displayValue();
     this->transitif();
@@ -29,8 +30,8 @@ Graphe::Graphe(string filepath) {
     this->displayMatrix();
     this->computeRank();
     this->computeDateBegin();
-    this->GanttBegin();
     this->computeDateEnd();
+    this->GanttBegin();
     this->GanttEnd();
 
 }
@@ -49,6 +50,10 @@ void Graphe::load(string const filepath) {
     }
 
     file >> nbVertex;
+    
+    if (nbVertex > 0) {
+        this->addVertex('a', 0);
+    }
 
     for (int i = 0; i< nbVertex; i++) {
         file >> name;
@@ -57,6 +62,10 @@ void Graphe::load(string const filepath) {
             cout<<"Mauvaise formation du fichier : multiple declaration du meme sommet"<<endl<<endl;
             return;
         }
+    }
+    
+    if (nbVertex > 0) {
+        this->addVertex('z', 0);
     }
 
     cout<<"----------------------------"<<endl<<"Probleme d'ordonnancement"<<endl<<"----------------------------"<<endl<<endl;
@@ -135,10 +144,84 @@ bool Graphe::addArc(char origin, char destination) {
     return true;
 }
 
-void Graphe :: displayAdj ()//vector<char>& adjacent
+void Graphe::configGraph() {
+    
+    cout<<"Creation du graphe\n----------------------\nPropriétés du graphe :"<<endl<<endl;
+    
+    cout<<"- nombre de sommets : "<< patch::to_string(this->vertex.size()) <<endl;
+    cout<<"- graphe oriente"<<endl;
+    cout<<"- 1 valeur (numerique) pour chaque arc"<<endl;
+    cout<<"- maximum 1 arc d'un sommet X donne vers un sommet Y donné"<<endl;
+    cout<<"--> Ajout des sommets \"debut de projet\" ('a') et \"fin de projet\" ('z')"<<endl;
+    cout<<"--> Recherche des points d'entree et points de sortie - Ajout des arcs incidents au debut et à la fin de projet"<<endl;
+    this->addExtremity();
+    
+    cout<<"--> La matrice d’adjacence  : Madj[x][y] = vrai si arc de x vers y"<<endl;
+    cout<<"\tde la matrice des valeurs : Mval[x][y] = valeur de l'arc s'il existe"<<endl;
+    cout<<"--> Arcs associés aux contraintes de type \"X ne peut commencer que lorsque Y est terminee\""<<endl;
+    
+    for (int i = 0; i < this->values.size(); i++) {
+        
+        for (int j = 0; j < this->values[i].size(); j++) {
+            
+            if (this->values[i][j] != 0) {
+                cout<<this->vertex[i]<<" --["<<this->values[i][j]<<"]--> "<<this->vertex[j]<<endl;
+            }
+            
+        }
+        
+    }
+    
+    cout<<endl<<endl;
+    
+}
+
+void Graphe::addExtremity() {
+    
+    bool entry, exit;
+    
+    for (int i = 0; i < this->vertex.size(); i++) {
+        if (this->vertex[i] == 'a' || this->vertex[i] == 'z') {
+            continue;
+        }
+        entry = true;
+        
+        for(int j = 0; j < this->vertex.size(); j++) {
+            if (this->values[j][i] != 0) {
+                entry = false;
+            }
+        }
+        
+        if (entry) {
+            this->addArc('a', this->vertex[i]);
+        }
+    }
+    
+    for (int i = 0; i < this->vertex.size(); i++) {
+        if (this->vertex[i] == 'z') {
+            continue;
+        }
+        
+        exit = true;
+        
+        for(int j = 0; j < this->vertex.size(); j++) {
+            if (this->values[i][j] != 0) {
+                exit = false;
+            }
+        }
+        
+        if (exit) {
+            this->addArc(this->vertex[i], 'z');
+        }
+    }
+    
+}
+
+void Graphe :: displayAdj ()
 {
-    int const numberVertex = (int)this->vertex.size() ;
-        cout<<"Matrice d'adjacence"<<endl<<endl<<"\t\t";
+    int const numberVertex = (int)this->vertex.size();
+    cout<<"Matrice d'adjacence\n----------------------"<<endl<<endl<<"\t\t";
+    
     for (int i = 0; i < numberVertex; i++) {
         cout<< this->vertex[i]<< "\t|\t";
     }
@@ -151,14 +234,15 @@ void Graphe :: displayAdj ()//vector<char>& adjacent
             cout << this->adjacent[i][j] << "\t|\t";
         }
         cout<<endl;
-
-}
+    }
+    
+    cout<<endl;
 }
 
 void Graphe :: displayValue ()
 {
-     int const numberVertex = (int)this->vertex.size() ;
-       cout<<"Matrice des Valeurs"<<endl<<endl<<"\t\t";
+    int const numberVertex = (int)this->vertex.size() ;
+    cout<<"Matrice des Valeurs\n----------------------"<<endl<<endl<<"\t\t";
     for (int i = 0; i < numberVertex; i++) {
         cout<< this->vertex[i]<< "\t|\t";
     }
@@ -171,8 +255,9 @@ void Graphe :: displayValue ()
             cout << this->values[i][j] << "\t|\t";
         }
         cout<<endl;
-
-}
+    }
+    
+    cout<<endl;
 }
 
 
@@ -227,6 +312,8 @@ void Graphe::computeDateBegin() {
     int min = max, k= -1;
 
     this->dateBegin = vector< int >(this->vertex.size());
+    
+    cout<<endl<<"----------------------------------------------------\n Calcul du calendrier au plus tôt\n----------------------------------------------------"<<endl<<endl;
 
     while (calculated < this->vertex.size()) {
 
@@ -253,12 +340,17 @@ void Graphe::computeDateBegin() {
         if (current.size() > 0) {
             k = this->rank[current[0]];
         }
+        
+        cout<<"Calcul pour le rang "<<patch::to_string(k)<<" commencant a la date "<<patch::to_string(costBegin)<<" comprenant les sommets suivants :"<<endl;
 
         for (int i = 0; i < current.size(); i++) {
+            cout<<"- "<<current[i]<<endl;
             this->dateBegin[current[i]] = costBegin;
         }
 
         costBegin += costRank;
+        
+        cout<<"Date de fin du rang : "<<patch::to_string(costBegin)<<endl;
 
         calculated += current.size();
         current.clear();
@@ -280,12 +372,13 @@ void Graphe::computeDateEnd() {
     
     this->dateEnd = vector< int >(this->vertex.size());
     
+    cout<<endl<<"----------------------------------------------------\n Calcul du calendrier au plus tard\n----------------------------------------------------"<<endl<<endl;
+    
     while (calculated < this->vertex.size()) {
         
         max = min;
         for (int i = 0; i < this->rank.size(); i++) {
             if (this->rank[i] < k && this->rank[i] > max) {
-                
                 current.clear();
                 max = this->rank[i];
                 current.push_back(i);
@@ -302,8 +395,12 @@ void Graphe::computeDateEnd() {
             
         if (lastElement) {
             
+            const int timeEnd = *max_element(this->dateBegin.begin(), this->dateBegin.end());
+            cout<<"Calcul pour le rang "<<patch::to_string(k)<<" comprenant les sommets suivants :"<<endl;
+            
             for (int i = 0; i < current.size(); i++) {
-                this->dateEnd[current[i]] = *max_element(this->dateBegin.begin(), this->dateBegin.end());
+                this->dateEnd[current[i]] = timeEnd;
+                cout<<"- "<<current[i]<<" terminant a la date "<<patch::to_string(timeEnd)<<endl;
             }
             lastElement = false;
             
@@ -311,6 +408,8 @@ void Graphe::computeDateEnd() {
             
             int minSuc = 0;
             bool firstSuc;
+            
+            cout<<"Calcul pour le rang "<<patch::to_string(k)<<" comprenant les sommets suivants :"<<endl;
             
             for (int i = 0; i < current.size(); i++) {
                 
@@ -331,7 +430,9 @@ void Graphe::computeDateEnd() {
                     
                 }
                 this->dateEnd[current[i]] = minSuc - this->cost[current[i]];
+                cout<<"- "<<current[i]<<" terminant a la date "<<patch::to_string(this->dateEnd[current[i]])<<endl;
             }
+            
             
         }
         
@@ -407,7 +508,7 @@ void Graphe::transitif()
             }
      }
 
-     cout<<"Matrice transitive detection de circuit "<<endl<<endl<<"\t\t";
+     cout<<endl<<"Matrice transitive detection de circuit\n----------------------"<<endl<<endl<<"\t\t";
         for ( i = 0; i < numberVertex; i++) {
             cout<< this->vertex[i]<< "\t|\t";
         }
@@ -445,7 +546,7 @@ void Graphe::GanttBegin(){
     
     max_time += this->cost[distance(this->dateBegin.begin(), max_element(this->dateBegin.begin(), this->dateBegin.end()))];
     
-    cout<<endl<<endl<<"Dates au plus court"<<endl<<endl;
+    cout<<endl<<endl<<"Dates au plus court\n----------------------"<<endl<<endl;
     cout<<"\t\t";
 
     for (i = 0;i < max_time;i ++){
@@ -475,7 +576,7 @@ void Graphe::GanttEnd(){
     
     max_time += this->cost[distance(this->dateEnd.begin(), max_element(this->dateEnd.begin(), this->dateEnd.end()))];
     
-    cout<<endl<<endl<<"Dates au plus tard"<<endl<<endl;
+    cout<<endl<<endl<<"Dates au plus tard\n----------------------"<<endl<<endl;
     cout<<"\t\t";
 
     for (i = 0;i < max_time;i ++){
