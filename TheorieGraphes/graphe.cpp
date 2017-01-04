@@ -93,10 +93,11 @@ void Graphe::load(string const filepath) {
                 if(line[i] == '.')
                     break;
                 if (this->addArc(line[i], origin) == false) {
-                    cout<<"Mauvaise formation du fichier : mauvaise contrainte"<<endl<<endl;
-                    return;
+                    cout<<"!!! Création de circuit avec valeur potentiellement positive. Contrainte ignoree et arc supprime. ("<<origin<<" ne peut commencer que lorsque la tache "<<line[i]<<" est terminee)"<<endl;
+                } else {
+                    cout<<origin<<" ne peut commencer que lorsque la tache "<<line[i]<<" est terminee"<<endl;
                 }
-                cout<<origin<<" ne peut commencer que lorsque la tache "<<line[i]<<" est terminee"<<endl;
+                
             }
         }
     }
@@ -137,10 +138,42 @@ bool Graphe::addArc(char origin, char destination) {
         return false;
 
     this->adjacent[posOrigin][posDestination] = true;
-    this->values[posOrigin][posDestination] += this->cost[posOrigin];
-
+    
+    if (hasCircuit(posOrigin) == true) {
+        this->adjacent[posOrigin][posDestination] = false;
+        return false;
+    } else {
+        this->values[posOrigin][posDestination] += this->cost[posOrigin];
+    }
 
     return true;
+}
+
+bool Graphe::hasCircuit(int check, int pos) {
+    
+    vector< int > current;
+    
+    if (pos == check)
+        return true;
+    
+    if (pos == -1) {
+        pos = check;
+    }
+    
+    for (int i = 0; i < this->vertex.size(); i++) {
+        if (this->adjacent[pos][i] == true) {
+            current.push_back(i);
+        }
+    }
+    
+    for (int i = 0; i < current.size(); i++) {
+        if (hasCircuit(check, current[i]) == true) {
+            return true;
+        }
+    }
+    
+    return false;
+    
 }
 
 void Graphe::configGraph() {

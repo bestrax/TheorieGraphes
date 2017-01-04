@@ -26,6 +26,7 @@ public:
     void load(string const filepath);
     bool addVertex(char name, int cost);
     bool addArc(char origin, char destination);
+    bool hasCircuit(int check, int pos = -1);
     void configGraph();
     void addExtremity();
     void createMatrix();

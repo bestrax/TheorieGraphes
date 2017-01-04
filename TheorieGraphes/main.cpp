@@ -9,7 +9,7 @@
 
 int main(int argc, const char * argv[]) {
 
-    Graphe graphe("Graphes/test1.txt");
+    Graphe graphe("Graphes/test2.txt");
 
     return 0;
 }
