@@ -1,9 +1,9 @@
 //
-//  graphe.cpp
+//  moine-picard-roude-riviere-robert-graphe.cpp
 //  TheorieGraphes
-//
+//  MOINE-PICARD - ROUDE - RIVIERE - ROBERT
 
-#include "graphe.hpp"
+#include "moine-picard-roude-riviere-robert-graphe.hpp"
 #include <fstream>
 
 //Constructeur par défaut
@@ -31,6 +31,7 @@ Graphe::Graphe(string filepath) {
     this->computeRank();
     this->computeDateBegin();
     this->computeDateEnd();
+    this->showCalendars();
     this->GanttBegin();
     this->GanttEnd();
 
@@ -39,7 +40,7 @@ Graphe::Graphe(string filepath) {
 void Graphe::load(string const filepath) {
     
     //Ouverture du fichier et initialisation des variables
-    ifstream file(filepath);
+    ifstream file(filepath.c_str());
     int nbVertex;
     char name;
     string line;
@@ -440,6 +441,7 @@ void Graphe::computeDateBegin() {
         calculated += current.size();
         current.clear();
     }
+    
 }
 
 void Graphe::computeDateEnd() {
@@ -586,6 +588,26 @@ vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vecto
     }
 
     return roots;
+}
+
+void Graphe::showCalendars() {
+    cout<<"-----------\nCalendriers\n-----------"<<endl<<endl;
+    cout<<"\t\t\t\t\t";
+    for(int i = 0; i < this->vertex.size(); i++) {
+        cout<<this->vertex[i]<<"\t";
+    }
+    
+    cout<<endl<<"Date au plus tot\t";
+    
+    for(int i = 0; i < this->dateBegin.size(); i++) {
+        cout<<this->dateBegin[i]<<"\t";
+    }
+    
+    cout<<endl<<"Date au plus tard\t";
+    
+    for(int i = 0; i < this->dateEnd.size(); i++) {
+        cout<<this->dateEnd[i]<<"\t";
+    }
 }
 
 void Graphe::GanttBegin(){

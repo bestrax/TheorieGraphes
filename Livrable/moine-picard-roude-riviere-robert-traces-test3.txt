@@ -1,0 +1,203 @@
+Entrez le nom du fichier sans le .txt :
+test3
+
+
+----------------------------
+Probleme d'ordonnancement
+----------------------------
+
+Durees des taches
+
+a	A	B	C	D	E	F	G	H	I	J	z	
+0	1	2	3	4	5	6	7	8	9	10	0	
+
+Contraintes
+
+A ne peut commencer que lorsque la tache D est terminee
+A ne peut commencer que lorsque la tache J est terminee
+B ne peut commencer que lorsque la tache G est terminee
+C ne peut commencer que lorsque la tache F est terminee
+D ne peut commencer que lorsque la tache I est terminee
+E ne peut commencer que lorsque la tache D est terminee
+F ne peut commencer que lorsque la tache J est terminee
+H ne peut commencer que lorsque la tache E est terminee
+H ne peut commencer que lorsque la tache G est terminee
+!!! Création de circuit avec valeur potentiellement positive. Contrainte ignoree et arc supprime. (I ne peut commencer que lorsque la tache A est terminee)
+I ne peut commencer que lorsque la tache C est terminee
+!!! Création de circuit avec valeur potentiellement positive. Contrainte ignoree et arc supprime. (J ne peut commencer que lorsque la tache F est terminee)
+
+
+Creation du graphe
+----------------------
+Propriétés du graphe :
+
+- nombre de sommets : 10
+- graphe oriente
+- 1 valeur (numerique) pour chaque arc
+- maximum 1 arc d'un sommet X donne vers un sommet Y donné
+--> Ajout des sommets "debut de projet" ('a') et "fin de projet" ('z')
+--> Recherche des points d'entree et points de sortie - Ajout des arcs incidents au debut et à la fin de projet
+--> La matrice d’adjacence  : Madj[x][y] = vrai si arc de x vers y
+	de la matrice des valeurs : Mval[x][y] = valeur de l'arc s'il existe
+--> Arcs associés aux contraintes de type "X ne peut commencer que lorsque Y est terminee"
+A --[1]--> z
+B --[2]--> z
+C --[3]--> I
+D --[4]--> A
+D --[4]--> E
+E --[5]--> H
+F --[6]--> C
+G --[7]--> B
+G --[7]--> H
+H --[8]--> z
+I --[9]--> D
+J --[10]--> A
+J --[10]--> F
+
+
+Matrice d'adjacence
+----------------------
+
+		a	|	A	|	B	|	C	|	D	|	E	|	F	|	G	|	H	|	I	|	J	|	z	|	
+a	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	1	|	0	|	0	|	1	|	0	|	
+A	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	1	|	
+B	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	1	|	
+C	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	1	|	0	|	0	|	
+D	|	0	|	1	|	0	|	0	|	0	|	1	|	0	|	0	|	0	|	0	|	0	|	0	|	
+E	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	1	|	0	|	0	|	0	|	
+F	|	0	|	0	|	0	|	1	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	
+G	|	0	|	0	|	1	|	0	|	0	|	0	|	0	|	0	|	1	|	0	|	0	|	0	|	
+H	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	1	|	
+I	|	0	|	0	|	0	|	0	|	1	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	
+J	|	0	|	1	|	0	|	0	|	0	|	0	|	1	|	0	|	0	|	0	|	0	|	0	|	
+z	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	
+
+Matrice des Valeurs
+----------------------
+
+		a	|	A	|	B	|	C	|	D	|	E	|	F	|	G	|	H	|	I	|	J	|	z	|	
+a	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	
+A	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	1	|	
+B	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	2	|	
+C	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	3	|	0	|	0	|	
+D	|	0	|	4	|	0	|	0	|	0	|	4	|	0	|	0	|	0	|	0	|	0	|	0	|	
+E	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	5	|	0	|	0	|	0	|	
+F	|	0	|	0	|	0	|	6	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	
+G	|	0	|	0	|	7	|	0	|	0	|	0	|	0	|	0	|	7	|	0	|	0	|	0	|	
+H	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	8	|	
+I	|	0	|	0	|	0	|	0	|	9	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	
+J	|	0	|	10	|	0	|	0	|	0	|	0	|	10	|	0	|	0	|	0	|	0	|	0	|	
+z	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	0	|	
+
+----------------------------
+Graphe d'ordonnancement
+----------------------------
+
+12 sommets
+10 taches
+
+Matrice d'adjacence et des valeurs
+
+		a	|	A	|	B	|	C	|	D	|	E	|	F	|	G	|	H	|	I	|	J	|	z	|	
+a	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	0	|	 	|	 	|	0	|	 	|	
+A	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	1	|	
+B	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	2	|	
+C	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	3	|	 	|	 	|	
+D	|	 	|	4	|	 	|	 	|	 	|	4	|	 	|	 	|	 	|	 	|	 	|	 	|	
+E	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	5	|	 	|	 	|	 	|	
+F	|	 	|	 	|	 	|	6	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	
+G	|	 	|	 	|	7	|	 	|	 	|	 	|	 	|	 	|	7	|	 	|	 	|	 	|	
+H	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	8	|	
+I	|	 	|	 	|	 	|	 	|	9	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	
+J	|	 	|	10	|	 	|	 	|	 	|	 	|	10	|	 	|	 	|	 	|	 	|	 	|	
+z	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	 	|	
+
+----------------------------------------------------
+ Calcul du calendrier au plus tôt
+----------------------------------------------------
+
+Calcul pour le rang 0 comprenant les sommets suivants :
+- a commencant a la date 0
+Calcul pour le rang 1 comprenant les sommets suivants :
+- G commencant a la date 0
+- J commencant a la date 0
+Calcul pour le rang 2 comprenant les sommets suivants :
+- B commencant a la date 7
+- F commencant a la date 10
+Calcul pour le rang 3 comprenant les sommets suivants :
+- C commencant a la date 16
+Calcul pour le rang 4 comprenant les sommets suivants :
+- I commencant a la date 19
+Calcul pour le rang 5 comprenant les sommets suivants :
+- D commencant a la date 28
+Calcul pour le rang 6 comprenant les sommets suivants :
+- A commencant a la date 32
+- E commencant a la date 32
+Calcul pour le rang 7 comprenant les sommets suivants :
+- H commencant a la date 37
+Calcul pour le rang 8 comprenant les sommets suivants :
+- z commencant a la date 45
+
+----------------------------------------------------
+ Calcul du calendrier au plus tard
+----------------------------------------------------
+
+Calcul pour le rang 8 comprenant les sommets suivants :
+- z terminant a la date 45
+Calcul pour le rang 7 comprenant les sommets suivants :
+- H terminant a la date 37
+Calcul pour le rang 6 comprenant les sommets suivants :
+- A terminant a la date 44
+- E terminant a la date 32
+Calcul pour le rang 5 comprenant les sommets suivants :
+- D terminant a la date 28
+Calcul pour le rang 4 comprenant les sommets suivants :
+- I terminant a la date 19
+Calcul pour le rang 3 comprenant les sommets suivants :
+- C terminant a la date 16
+Calcul pour le rang 2 comprenant les sommets suivants :
+- B terminant a la date 43
+- F terminant a la date 10
+Calcul pour le rang 1 comprenant les sommets suivants :
+- G terminant a la date 30
+- J terminant a la date 0
+Calcul pour le rang 0 comprenant les sommets suivants :
+- a terminant a la date 0
+-----------
+Calendriers
+-----------
+
+					a	A	B	C	D	E	F	G	H	I	J	z	
+Date au plus tot	0	32	7	16	28	32	10	0	37	19	0	45	
+Date au plus tard	0	44	43	16	28	32	10	30	37	19	0	45	
+
+Dates au plus court
+----------------------
+
+		0	|	1	|	2	|	3	|	4	|	5	|	6	|	7	|	8	|	9	|	10	|	11	|	12	|	13	|	14	|	15	|	16	|	17	|	18	|	19	|	20	|	21	|	22	|	23	|	24	|	25	|	26	|	27	|	28	|	29	|	30	|	31	|	32	|	33	|	34	|	35	|	36	|	37	|	38	|	39	|	40	|	41	|	42	|	43	|	44	|	
+A	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|		|		|		|		|		|		|		|		|		|		|		|		|	
+B	|		|		|		|		|		|		|		|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	
+C	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	
+D	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|	
+E	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|	
+F	|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	
+G	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	
+H	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	
+I	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	
+J	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	
+
+
+Dates au plus tard
+----------------------
+
+		0	|	1	|	2	|	3	|	4	|	5	|	6	|	7	|	8	|	9	|	10	|	11	|	12	|	13	|	14	|	15	|	16	|	17	|	18	|	19	|	20	|	21	|	22	|	23	|	24	|	25	|	26	|	27	|	28	|	29	|	30	|	31	|	32	|	33	|	34	|	35	|	36	|	37	|	38	|	39	|	40	|	41	|	42	|	43	|	44	|	
+A	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	
+B	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	
+C	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	
+D	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|	
+E	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|	
+F	|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	
+G	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|	
+H	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	
+I	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	
+J	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|	=	|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|		|	

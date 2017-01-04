@@ -1,11 +1,11 @@
 //
-//  main.cpp
+//  moine-picard-roude-riviere-robert-main.cpp
 //  TheorieGraphes
-//
+//  MOINE-PICARD - ROUDE - RIVIERE - ROBERT
 
 #include <iostream>
 #include <fstream>
-#include "graphe.hpp"
+#include "moine-picard-roude-riviere-robert-graphe.hpp"
 
 int main(int argc, const char * argv[]) {
     

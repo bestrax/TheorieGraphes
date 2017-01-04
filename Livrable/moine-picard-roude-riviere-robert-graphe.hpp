@@ -1,7 +1,7 @@
 //
-//  graphe.hpp
+//  moine-picard-roude-riviere-robert-graphe.hpp
 //  TheorieGraphes
-//
+//  MOINE-PICARD - ROUDE - RIVIERE - ROBERT
 
 #ifndef graphe_hpp
 #define graphe_hpp
@@ -21,8 +21,7 @@ class Graphe {
 public:
     Graphe();
     Graphe(string filepath);
-
-    // Déstructeur
+    
     void load(string const filepath);
     bool addVertex(char name, int cost);
     bool addArc(char origin, char destination);
@@ -36,6 +35,7 @@ public:
     void computeDateBegin();
     void computeDateEnd();
     void computeRank();
+    void showCalendars();
     void GanttBegin ();
     void GanttEnd ();
     vector< int > searchRoot(vector< vector< bool > > &adjacent, vector< int > &ignore);
