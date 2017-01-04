@@ -25,7 +25,6 @@ Graphe::Graphe(string filepath) {
     this->configGraph();
     this->displayAdj();
     this->displayValue();
-    this->transitif();
     this->createMatrix();
     this->displayMatrix();
     this->computeRank();
@@ -71,13 +70,13 @@ void Graphe::load(string const filepath) {
     cout<<"----------------------------"<<endl<<"Probleme d'ordonnancement"<<endl<<"----------------------------"<<endl<<endl;
     cout<<"Durees des taches"<<endl<<endl;
 
-    for(int i = 0; i <nbVertex; i++) {
+    for(int i = 0; i <nbVertex+2; i++) {
         cout<<this->vertex[i]<<"\t";
     }
 
     cout<<endl;
 
-    for(int i = 0; i <nbVertex; i++) {
+    for(int i = 0; i <nbVertex+2; i++) {
         cout<<this->cost[i]<<"\t";
     }
 
@@ -88,12 +87,12 @@ void Graphe::load(string const filepath) {
     while (!file.eof()) {
         file >> line;
 
-        if (line.size() > 2) {
+        if (line.size() >= 2) {
             origin = line[0];
             for (int i = 1; i<line.size(); i++) {
                 if(line[i] == '.')
                     break;
-                if ( this->addArc(origin, line[i]) == false) {
+                if (this->addArc(line[i], origin) == false) {
                     cout<<"Mauvaise formation du fichier : mauvaise contrainte"<<endl<<endl;
                     return;
                 }
@@ -148,7 +147,7 @@ void Graphe::configGraph() {
     
     cout<<"Creation du graphe\n----------------------\nPropriétés du graphe :"<<endl<<endl;
     
-    cout<<"- nombre de sommets : "<< patch::to_string(this->vertex.size()) <<endl;
+    cout<<"- nombre de sommets : "<< patch::to_string(this->vertex.size()-2) <<endl;
     cout<<"- graphe oriente"<<endl;
     cout<<"- 1 valeur (numerique) pour chaque arc"<<endl;
     cout<<"- maximum 1 arc d'un sommet X donne vers un sommet Y donné"<<endl;
@@ -180,25 +179,30 @@ void Graphe::addExtremity() {
     
     bool entry, exit;
     
+    //Rechercher des entrées
     for (int i = 0; i < this->vertex.size(); i++) {
+        
+        //Si c'est l'entrée ou la sortie on passe
         if (this->vertex[i] == 'a' || this->vertex[i] == 'z') {
             continue;
         }
         entry = true;
         
+        //On parcourt toutes les contraintes pouvant mener à ce sommet
         for(int j = 0; j < this->vertex.size(); j++) {
             if (this->values[j][i] != 0) {
                 entry = false;
             }
         }
         
+        //Si on n'a pas trouvé de contrainte alors on peut ajouter un arc
         if (entry) {
             this->addArc('a', this->vertex[i]);
         }
     }
     
     for (int i = 0; i < this->vertex.size(); i++) {
-        if (this->vertex[i] == 'z') {
+        if (this->vertex[i] == 'a' || this->vertex[i] == 'z') {
             continue;
         }
         
@@ -309,13 +313,14 @@ void Graphe::computeDateBegin() {
     vector< int > current;
     int calculated = 0, costRank = 0, costBegin = 0;
     const int max = *max_element(this->rank.begin(), this->rank.end());
-    int min = max, k= -1;
+    const int numberVertex = (int)this->vertex.size();
+    int min = max, k= -1, costTask;
 
-    this->dateBegin = vector< int >(this->vertex.size());
+    this->dateBegin = vector< int >(numberVertex);
     
     cout<<endl<<"----------------------------------------------------\n Calcul du calendrier au plus tôt\n----------------------------------------------------"<<endl<<endl;
 
-    while (calculated < this->vertex.size()) {
+    while (calculated < numberVertex) {
 
         min = max;
         costRank = 0;
@@ -325,13 +330,11 @@ void Graphe::computeDateBegin() {
                 current.clear();
                 min = this->rank[i];
                 current.push_back(i);
-                costRank = this->cost[i];
 
             } else if (this->rank[i] == min) {
 
                 current.push_back(i);
                 if (this->cost[i] > costRank) {
-                    costRank = this->cost[i];
                 }
 
             }
@@ -341,11 +344,24 @@ void Graphe::computeDateBegin() {
             k = this->rank[current[0]];
         }
         
-        cout<<"Calcul pour le rang "<<patch::to_string(k)<<" commencant a la date "<<patch::to_string(costBegin)<<" comprenant les sommets suivants :"<<endl;
+        cout<<"Calcul pour le rang "<<patch::to_string(k)<<" comprenant les sommets suivants :"<<endl;
+        
 
         for (int i = 0; i < current.size(); i++) {
-            cout<<"- "<<current[i]<<endl;
-            this->dateBegin[current[i]] = costBegin;
+            
+            for (int j =0; j < numberVertex; j++) {
+                if (this->adjacent[j][current[i]] == true) {
+                    
+                    costTask = this->dateBegin[j] + this->cost[j];
+                    
+                    if (this->dateBegin[current[i]] < costTask) {
+                        this->dateBegin[current[i]] = costTask;
+                    }
+                }
+            }
+            
+            cout<<"- "<<this->vertex[current[i]]<<" commencant a la date "<<this->dateBegin[current[i]]<<endl;
+            
         }
 
         costBegin += costRank;
@@ -400,7 +416,7 @@ void Graphe::computeDateEnd() {
             
             for (int i = 0; i < current.size(); i++) {
                 this->dateEnd[current[i]] = timeEnd;
-                cout<<"- "<<current[i]<<" terminant a la date "<<patch::to_string(timeEnd)<<endl;
+                cout<<"- "<<this->vertex[current[i]]<<" terminant a la date "<<patch::to_string(timeEnd)<<endl;
             }
             lastElement = false;
             
@@ -430,7 +446,7 @@ void Graphe::computeDateEnd() {
                     
                 }
                 this->dateEnd[current[i]] = minSuc - this->cost[current[i]];
-                cout<<"- "<<current[i]<<" terminant a la date "<<patch::to_string(this->dateEnd[current[i]])<<endl;
+                cout<<"- "<<this->vertex[current[i]]<<" terminant a la date "<<patch::to_string(this->dateEnd[current[i]])<<endl;
             }
             
             
@@ -484,61 +500,6 @@ vector< int > Graphe::searchRoot(vector< vector< bool > > &adjacentMatrix, vecto
     return roots;
 }
 
-void Graphe::transitif()
- {
-    int const numberVertex = (int)this->vertex.size();
-    int i=0;
-    int j=0;
-    int k=0;
-
-        for (k = 0; k < numberVertex; k++)
-        {
-            for (i = 0; i < numberVertex; i++)
-            {
-                for (j = 0; j < numberVertex; j++)
-                {
-                    if ((this->adjacent[i][k] *this->adjacent[k][j] != 0) && (i != j))
-                    {
-                        if ((this->adjacent[i][k] + this->adjacent[k][j] < this->adjacent[i][j]) || (this->adjacent[i][j] == 0))
-                        {
-                            this->adjacent[i][j] =this->adjacent[i][k] + this->adjacent[k][j];
-                        }
-                    }
-                }
-            }
-     }
-
-     cout<<endl<<"Matrice transitive detection de circuit\n----------------------"<<endl<<endl<<"\t\t";
-        for ( i = 0; i < numberVertex; i++) {
-            cout<< this->vertex[i]<< "\t|\t";
-        }
-
-        cout<<endl;
-
-        for ( i = 0; i < numberVertex; i++) {
-            cout<< this->vertex[i]<< "\t|\t";
-            for (j = 0; j < numberVertex; j++) {
-                cout << this->adjacent[i][j] << "\t|\t";
-            }
-            cout<<endl;
-        }
-
-    for ( i = 0 ; i < numberVertex ; i++)
-    {
-        for (j = 0 ; j < numberVertex ; j++)
-        {
-            if ((adjacent[i][j] == 1)&&(i==j))
-            {
-                cout<<" circuit detecte : abandon"<<endl;
-                exit(0);
-                cout<<"L'abandon n'a pas fonctionne"<<endl;
-
-            }
-
-        }
-    }
- }
-
 void Graphe::GanttBegin(){
     int i = 0, date_begin = 0, date_end = 0, j = 0;
     int nb_vertex = (int)this->vertex.size();
@@ -555,6 +516,11 @@ void Graphe::GanttBegin(){
     cout << endl;
 
     for (i = 0;i < nb_vertex;i ++){
+        
+        if (this->vertex[i] == 'a' || this->vertex[i] == 'z') {
+            continue;
+        }
+        
         cout <<this->vertex[i];
         date_begin = this->dateBegin[i];
         date_end = this->cost[i] + date_begin;
@@ -585,6 +551,11 @@ void Graphe::GanttEnd(){
     cout << endl;
 
     for (i = 0;i < nb_vertex;i ++){
+        
+        if (this->vertex[i] == 'a' || this->vertex[i] == 'z') {
+            continue;
+        }
+        
         cout <<this->vertex[i];
         date_begin = this->dateEnd[i];
         date_end = this->cost[i] + date_begin;

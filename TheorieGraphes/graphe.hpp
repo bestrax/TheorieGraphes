@@ -32,7 +32,6 @@ public:
     void displayMatrix();
     void displayAdj();
     void displayValue();
-    void transitif();
     void computeDateBegin();
     void computeDateEnd();
     void computeRank();
