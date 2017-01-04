@@ -8,8 +8,14 @@
 #include "graphe.hpp"
 
 int main(int argc, const char * argv[]) {
+    
+    string path;
+    
+    cout<<"Entrez le nom du fichier sans le .txt :"<<endl;
+    cin>>path;
+    cout<<endl<<endl;
 
-    Graphe graphe("Graphes/test4.txt");
+    Graphe graphe(path+".txt");
 
     return 0;
 }
