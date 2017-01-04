@@ -323,7 +323,8 @@ void Graphe::displayMatrix() {
 
     cout<<"----------------------------"<<endl<<"Graphe d'ordonnancement"<<endl<<"----------------------------"<<endl<<endl;
 
-    cout<<this->vertex.size()<<" sommets"<<endl<<endl;
+    cout<<this->vertex.size()<<" sommets"<<endl;
+    cout<<this->vertex.size()-2<<" taches"<<endl<<endl;
 
     cout<<"Matrice d'adjacence et des valeurs"<<endl<<endl<<"\t\t";
     for (int i = 0; i < numberVertex; i++) {
